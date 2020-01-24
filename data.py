@@ -29,3 +29,15 @@ def load_y(file_name):
     data = pd.read_csv(file_name)
     print('Finished loading the file.')
     return data
+
+"""
+Fonctions pour la visualisation des EEG
+"""
+
+def plot_eeg_sample(x):
+    fig, axs = plt.subplots(nrows=2, ncols=4)
+    for i in range(7):
+        ax = axs[i // 4, i % 4]
+        ax.set_title('Channel ' + str(i+1))
+        ax.plot(x[i])
+    plt.show()
