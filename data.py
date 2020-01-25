@@ -2,6 +2,7 @@
 # script to load, handle and display data
 
 import h5py
+import itertools
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -29,6 +30,24 @@ def load_y(file_name):
     data = pd.read_csv(file_name)
     print('Finished loading the file.')
     return data
+
+"""
+data formatting functions
+"""
+
+def reorder_nhwc(x):
+    n, c, h, w = x.shape
+    x.shape = (n, h, w, c)
+
+def flatten_data(x, y):
+    """
+    takes the 40 independent samples and puts them in 40 different data points
+    So we have 40 times more data points
+    """
+    n, c, h, w = x.shape
+    x2 = x.reshape((n*c, 1, h, w), order='C')
+    y2= np.tile(y, (1, c)).reshape((n*c, 2), order='C')
+    return x2, y2
 
 """
 Fonctions pour la visualisation des EEG
