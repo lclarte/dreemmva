@@ -43,6 +43,7 @@ def flatten_data(x, y):
     """
     takes the 40 independent samples and puts them in 40 different data points
     So we have 40 times more data points
+    Shape of the input x array : N, C, H, W = (N, 40, 7, 500) here
     """
     n, c, h, w = x.shape
     x2 = x.reshape((n*c, 1, h, w), order='C')
