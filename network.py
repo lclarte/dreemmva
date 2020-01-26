@@ -6,10 +6,28 @@ from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatte
 
 class NetworkFactory:
     def __init__(self):
-        pass
+        self.h, self.w, self.c = 7, 500, 1
+        self.input_shape = (self.h, self.w, self.c)
+        self.activation = 'relu'
 
     def get_network(self):
-        pass
+        raise NotImplementedError()
+
+class SimpleNetworkFactory(NetworkFactory):
+    """
+    Reseau tres simple pour tester que le code tourne
+    """
+    def __init__(self):
+        super().__init__()
+        self.dense_shape = self.h*self.w*self.c
+        self.output_shape = 2
+    
+    def get_network(self):
+        model = keras.models.Sequential()
+        model.add(Flatten(input_shape=self.input_shape))
+        model.add(Dense(self.dense_shape, activation=self.activation))
+        model.add(Dense(self.output_shape, activation='softmax'))
+        return model
 
 class BaseNetworkFactory(NetworkFactory):
     """
@@ -17,12 +35,11 @@ class BaseNetworkFactory(NetworkFactory):
     """
     def __init__(self):
         # need to put channel last otherwise there are bugs
-        self.input_shape = (7, 500, 40)
-        self.activation = 'relu'
+        super().__init__()
         self.fsize      = 2
         self.nfilters1  = 300
         self.nfilters2  = 50     
-        self.dense_shape = 40*7*500
+        self.dense_shape = self.h*self.w*self.c
 
     def get_network(self):
         model = keras.models.Sequential()
