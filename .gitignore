@@ -2,3 +2,4 @@ data/y_train.csv
 data/y_lol.csv
 data/X_train.h5
 data/X_test.h5
+__pycache__/
