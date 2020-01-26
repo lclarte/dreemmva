@@ -31,6 +31,13 @@ def load_y(file_name):
     print('Finished loading the file.')
     return data
 
+def vectorize_y(Y):
+    N, _ = Y.shape
+    vecY = np.zeros(shape=(N, 2))
+    for i in range(N):
+        vecY[i, Y[i][1]] = 1.
+    return vecY
+
 """
 data formatting functions
 """
@@ -44,20 +51,9 @@ def flatten_data(x, y):
     takes the 40 independent samples and puts them in 40 different data points
     So we have 40 times more data points
     Shape of the input x array : N, C, H, W = (N, 40, 7, 500) here
+    Shape of the output x2 array : N*C, 1, H, W (only one channel)
     """
     n, c, h, w = x.shape
     x2 = x.reshape((n*c, 1, h, w), order='C')
     y2= np.tile(y, (1, c)).reshape((n*c, 2), order='C')
     return x2, y2
-
-"""
-Fonctions pour la visualisation des EEG
-"""
-
-def plot_eeg_sample(x):
-    fig, axs = plt.subplots(nrows=2, ncols=4)
-    for i in range(7):
-        ax = axs[i // 4, i % 4]
-        ax.set_title('Channel ' + str(i+1))
-        ax.plot(x[i])
-    plt.show()
