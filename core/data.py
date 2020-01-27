@@ -14,7 +14,8 @@ Data loading functions
 
 def load_x(file_name):
     """
-    Load X dataset from h5 file
+    Load X dataset from h5 file.
+    Warning : returns the data in the format (N, C, H, W) = (_, 40, 7, 500)
     """
     with h5py.File(file_name, 'r') as file:
         print('Started loading file', file_name)
@@ -46,6 +47,21 @@ def reorder_nhwc(x):
     n, c, h, w = x.shape
     x.shape = (n, h, w, c)
 
+def flatten_x(x):
+    """
+    Applatit les elements de X i.e prend les 40 echantillons independants et en fait 40 inputs
+    differents. 
+    """
+    n, c, h, w = x.shape
+    return x.reshape((n*c, 1, h, w), order='C')
+    
+def flatten_y(y : np.ndarray, repeat : int):
+    """
+    Recopie chaque entree de y un nombre repeat de fois
+    """
+    n, _ = y.shape
+    return np.tile(y, (1, repeat)).reshape((n*repeat, 2), order='C')
+
 def flatten_data(x, y):
     """
     takes the 40 independent samples and puts them in 40 different data points
@@ -53,18 +69,35 @@ def flatten_data(x, y):
     Shape of the input x array : N, C, H, W = (N, 40, 7, 500) here
     Shape of the output x2 array : N*C, 1, H, W (only one channel)
     """
-    n, c, h, w = x.shape
-    x2 = x.reshape((n*c, 1, h, w), order='C')
-    y2= np.tile(y, (1, c)).reshape((n*c, 2), order='C')
-    return x2, y2
+    assert (len(x.shape) == 4)
+    return flatten_x(x), flatten_y(y, repeat=x.shape[1])
+
+def load_all(name_x, name_y):
+    """
+    Charger les donees x et y correspondentes, puis les formate afin de derouler les echantillons
+    et mettre au format NHWC
+    """
+    X = np.array(load_x(name_x))
+    Y = vectorize_y(np.array(load_y(name_y)))
+    X, Y = flatten_data(X, Y)
+    reorder_nhwc(X)
+    return X, Y
 
 """
 data transformation functions
 """
 
-def fft_eeg(x):
+def fft_eeg(xs):
     """
-    TODO
-    Fait une transformee de Fourier sur les 7 channels donnes en entree
+    Fait une transformee de Fourier sur les 7 channels des donnees en entree
+    Taille : (_, 7, 500, 1) car le format d'entree est NHWC
     """
-    pass
+    shape = xs.shape
+    # xs must be an
+    if len(shape) == 3:
+        xs.shape = (1,) + shape
+    elif len(shape) < 3:
+        raise ValueError()
+    # fourier transform sur l'avant derniere coordonnees
+    return np.fft.fft(xs, axis=2)
+    

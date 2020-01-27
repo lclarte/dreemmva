@@ -23,7 +23,7 @@ class DataTest(unittest.TestCase):
                     for l in range(2):
                         if x2[2*i + j, 0, k, l] != x[i, j, k, l]:
                             x_valid = False
-        self.assertTrue(x_valid)
+        self.assertTrue(x_valid and y_valid)
 
 if __name__ == '__main__':
     unittest.main()

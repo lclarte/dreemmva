@@ -64,8 +64,8 @@ class BaseNetworkFactory(NetworkFactory):
 class Conv1DNetworkFactory(NetworkFactory):
     def __init__(self):
         super().__init__()
-        self.fsize = [3, 3, 3, 3, 3]
-        self.nfilters = [300, 300, 100, 100, 100]
+        self.fsize = [2, 2, 2, 2, 2, 2, 2]
+        self.nfilters = [300, 300, 200, 200, 100, 100, 100]
         self.dense_shape = self.h * self.w * self.c
 
     def get_network(self):
