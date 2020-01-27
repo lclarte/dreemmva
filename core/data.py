@@ -57,3 +57,14 @@ def flatten_data(x, y):
     x2 = x.reshape((n*c, 1, h, w), order='C')
     y2= np.tile(y, (1, c)).reshape((n*c, 2), order='C')
     return x2, y2
+
+"""
+data transformation functions
+"""
+
+def fft_eeg(x):
+    """
+    TODO
+    Fait une transformee de Fourier sur les 7 channels donnes en entree
+    """
+    pass

@@ -1,3 +1,6 @@
+import sys
+sys.path.append('../core')
+
 import data
 import numpy as np
 import unittest

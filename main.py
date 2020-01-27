@@ -1,6 +1,6 @@
-from data import *
-from network import *
-from visualization import *
+from core.data import *
+from core.network import *
+from core.visualization import *
 
 from sklearn import model_selection
 
@@ -32,4 +32,4 @@ def test_train():
 	model.fit(X, Y, epochs=50, batch_size=32, validation_split=0.25)
 
 if __name__=='__main__':
-	test_train()
+	test_display()
