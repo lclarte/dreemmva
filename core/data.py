@@ -21,6 +21,7 @@ def load_x(file_name):
         print('Started loading file', file_name)
         data = file['features'][()]
         print('Finished loading the file.')
+        data = np.array(data)
     return data
 
 def load_y(file_name):
@@ -30,6 +31,7 @@ def load_y(file_name):
     print('Started loading file', file_name)
     data = pd.read_csv(file_name)
     print('Finished loading the file.')
+    data = np.array(data)
     return data
 
 def vectorize_y(Y):
@@ -45,7 +47,9 @@ data formatting functions
 
 def reorder_nhwc(x):
     n, c, h, w = x.shape
-    x.shape = (n, h, w, c)
+    x2 = np.copy(x)
+    x2.shape = (n, h, w, c)
+    return x2
 
 def flatten_x(x):
     """
@@ -74,13 +78,10 @@ def flatten_data(x, y):
 
 def load_all(name_x, name_y):
     """
-    Charger les donees x et y correspondentes, puis les formate afin de derouler les echantillons
-    et mettre au format NHWC
+    Charger les donees x et y correspondentes. Les retourne au format (N, 40, 7, 500)
     """
-    X = np.array(load_x(name_x))
-    Y = vectorize_y(np.array(load_y(name_y)))
-    X, Y = flatten_data(X, Y)
-    reorder_nhwc(X)
+    X = load_x(name_x)
+    Y = vectorize_y(load_y(name_y))
     return X, Y
 
 """
