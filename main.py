@@ -1,19 +1,22 @@
-from data import *
-from network import *
+from core.data import *
+from core.network import *
+from core.visualization import *
+from core.model import *
 
-def main():
+from sklearn import model_selection
+
+def test_train():
 	# test that we can load data
-	x_train = np.array(load_x('data/X_train.h5'))
-	y_train = np.array(load_y('data/y_train.csv'))
-	x_train, y_train = flatten_data(x_train, y_train)
-	reorder_nhwc(x_train)
+	X, Y = load_x('data/X_train.h5'), vectorize_y(load_y('data/y_train.csv'))
+	X_test = load_x('data/X_test.h5')
 
-	# load network and compile it 
-	model = SimpleNetworkFactory().get_network()
-	print(model.summary())
-	model.compile(loss='binary_crossentropy', optimizer='adamax', metrics=['accuracy'])
+	model = NNModel(None)
 
-	model.fit(x_train, y_train, epochs=10, batch_size=32)
+	model.train(X, Y)
+	model.get_network().save('data/base_model.h5')
+
+	y_pred = categorize_y(model.predict(X_test))
+	save_y(y_pred, 'data/y_test.csv')
 
 if __name__=='__main__':
-	main()
+	test_train()
