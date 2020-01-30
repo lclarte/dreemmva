@@ -3,6 +3,7 @@
 
 from core.network import BaseNetworkFactory
 import core.data as data
+import numpy as np
 
 import os
 import psutil
@@ -17,7 +18,7 @@ class TrainableModel:
     def train(self, x_train, y_train):
         pass
 
-    def predict(self, x_test):
+    def predict(self, x_test, y_test=None):
         pass
 
 class NNModel(TrainableModel):
@@ -46,8 +47,23 @@ class NNModel(TrainableModel):
         self.network.fit(x_train, y_train, epochs=self.epoch, batch_size=self.batch_size, validation_split=self.validation_split)
         return True
 
-    def predict(self, x_test):
+    def predict(self, x_test, y_test=None):
         """
         Retourne la prediction pour chacune des classes. Format : y \in {0, 1}
+        x_test.shape = (N_test, 40, 7, 500)
+        If y_test is not None, we compare our output to compute precision
         """
-        return self.network.predict(x_test)
+        n, c, h, w = x_test.shape
+        # classify data one by one
+        y = np.zeros(shape=(n, 2))
+        for i in range(n):
+            x = x_test[i].reshape((1, c, h, w))
+            x = data.reorder_nhwc(data.flatten_x(x))
+            # set of 40 predictions, one by independant sample
+            predictions = self.network.predict(x)
+            indx = np.argmax(np.mean(predictions, axis=0))
+            y[i, indx] = 1.
+        if not y_test is None:
+            correct = sum(1. for i in range(n) if y[i, 0] == y_test[i, 0] and y[i, 1] == y_test[i, 1])
+            print("Precision :", float(correct) / n)
+        return y
