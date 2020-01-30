@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from sklearn.metrics import accuracy_score
 
 """
 Data loading functions
@@ -66,6 +67,11 @@ def flatten_y(y : np.ndarray, repeat : int):
     n, _ = y.shape
     return np.tile(y, (1, repeat)).reshape((n*repeat, 2), order='C')
 
+def categorize_y(y):
+    """
+    
+    """
+
 def flatten_data(x, y):
     """
     takes the 40 independent samples and puts them in 40 different data points
@@ -83,6 +89,9 @@ def load_all(name_x, name_y):
     X = load_x(name_x)
     Y = vectorize_y(load_y(name_y))
     return X, Y
+
+def compare_predict(y_pred, y_true):
+    return accuracy_score(y_true, y_pred)
 
 """
 data transformation functions
