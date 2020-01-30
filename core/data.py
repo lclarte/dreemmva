@@ -1,6 +1,7 @@
 # data.py
 # script to load, handle and display data
 
+import csv
 import h5py
 import itertools
 import matplotlib.pyplot as plt
@@ -10,7 +11,7 @@ import seaborn as sns
 from sklearn.metrics import accuracy_score
 
 """
-Data loading functions
+Data loading and saving function functions
 """
 
 def load_x(file_name):
@@ -35,12 +36,13 @@ def load_y(file_name):
     data = np.array(data)
     return data
 
-def vectorize_y(Y):
-    N, _ = Y.shape
-    vecY = np.zeros(shape=(N, 2))
-    for i in range(N):
-        vecY[i, Y[i][1]] = 1.
-    return vecY
+def save_y(y, file_name):
+    with open(file_name, 'w') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',')
+        writer.writerow(['id', 'label'])
+        for i in range(len(y)):
+            writer.writerow([str(i), str(y[i])])
+
 
 """
 data formatting functions
@@ -67,6 +69,13 @@ def flatten_y(y : np.ndarray, repeat : int):
     n, _ = y.shape
     return np.tile(y, (1, repeat)).reshape((n*repeat, 2), order='C')
 
+def vectorize_y(Y):
+    N, _ = Y.shape
+    vecY = np.zeros(shape=(N, 2))
+    for i in range(N):
+        vecY[i, Y[i][1]] = 1.
+    return vecY
+
 def categorize_y(y):
     """
     Prend en argument les predictions y sous forme vectorisee et les transforme en categoriel
@@ -83,14 +92,6 @@ def flatten_data(x, y):
     """
     assert (len(x.shape) == 4)
     return flatten_x(x), flatten_y(y, repeat=x.shape[1])
-
-def load_all(name_x, name_y):
-    """
-    Charger les donees x et y correspondentes. Les retourne au format (N, 40, 7, 500)
-    """
-    X = load_x(name_x)
-    Y = vectorize_y(load_y(name_y))
-    return X, Y
 
 def compare_predict(y_pred, y_true):
     return accuracy_score(y_true, y_pred)

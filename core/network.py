@@ -58,6 +58,7 @@ class BaseNetworkFactory(NetworkFactory):
         model.add(Dropout(0.5))
         model.add(Flatten())
         model.add(Dense(self.dense_shape, activation=self.activation))
+        # output = vecteur de probas pour chaque classe
         model.add(Dense(2, activation='softmax'))
         return model
 

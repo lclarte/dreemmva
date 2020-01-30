@@ -47,6 +47,12 @@ class NNModel(TrainableModel):
         self.network.fit(x_train, y_train, epochs=self.epoch, batch_size=self.batch_size, validation_split=self.validation_split)
         return True
 
+    def set_network(self, network):
+        self.network = network
+
+    def get_network(self):
+        return self.network
+
     def predict(self, x_test):
         """
         Retourne la prediction pour chacune des classes. Format : y \in {0, 1}
