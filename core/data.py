@@ -69,8 +69,10 @@ def flatten_y(y : np.ndarray, repeat : int):
 
 def categorize_y(y):
     """
-    
+    Prend en argument les predictions y sous forme vectorisee et les transforme en categoriel
+    {0, 1}
     """
+    return np.argmax(y, axis=1)
 
 def flatten_data(x, y):
     """
@@ -110,4 +112,3 @@ def fft_eeg(xs):
         raise ValueError()
     # fourier transform sur l'avant derniere coordonnees
     return np.fft.fft(xs, axis=2)
-    

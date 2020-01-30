@@ -25,5 +25,10 @@ class DataTest(unittest.TestCase):
                             x_valid = False
         self.assertTrue(x_valid and y_valid)
 
+    def test_categorize_y(self):
+        y = np.array([[0., 1.], [1., 0.], [0., 1.]])
+        y2 = data.categorize_y(y)
+        self.assertTrue(np.all(np.equal(y2, [1., 0., 1.])))
+
 if __name__ == '__main__':
     unittest.main()
