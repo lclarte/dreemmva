@@ -45,7 +45,7 @@ def save_y(y, file_name):
 
 
 """
-data formatting functions
+data formatting / cleaning functions for inference
 """
 
 def reorder_nhwc(x):
@@ -96,13 +96,22 @@ def flatten_data(x, y):
 def compare_predict(y_pred, y_true):
     return accuracy_score(y_true, y_pred)
 
+def get_sample_weights(y):
+    """
+    Retourne les poids a mettre dans la loss pour contrebalancer le desequilibre entre les classes
+    """
+    n = len(y)
+    y_1 = np.sum([1. if np.array_equal(y[i], [0., 1.]) else 0. for i in range(n)])
+    y_0 = n - y_1
+    return np.array([y_1 / y_0 if np.array_equal(y[i], [1., 0.]) else y_0 / y_1 for i in range(n)])
+
 """
 data transformation functions
 """
 
 def fft_eeg(xs):
     """
-    Fait une transformee de Fourier sur les 7 channels des donnees en entree
+    Fait une tran sformee de Fourier sur les 7 channels des donnees en entree
     Taille : (_, 7, 500, 1) car le format d'entree est NHWC
     """
     shape = xs.shape
