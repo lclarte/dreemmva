@@ -10,10 +10,13 @@ def test_train():
 	X, Y = load_x('data/X_train.h5'), vectorize_y(load_y('data/y_train.csv'))
 	X_test = load_x('data/X_test.h5')
 
-	model = NNModel(None)
+	config = {'nn_factory' : 'BaseNetworkFactory',
+			  'epoch' : 30,
+			  'optimizer' : 'SGD'}
+	model = NNModel(config)
+	print(model.get_network().summary())
 
 	model.train(X, Y)
-	model.get_network().save('data/base_model.h5')
 
 	y_pred = categorize_y(model.predict(X_test))
 	save_y(y_pred, 'data/y_test.csv')
