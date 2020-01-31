@@ -9,5 +9,5 @@ Liens pertinents :
 
 ### TODO
 
-1. Coder les fonctions pour la prediction
-2. Abstraction pour entrainer les reseaux de neurone de la meme maniere que les autres modeles
+1. Gérer l'imbalance entre les classes : actuellement, il y a plus de classes 0 que de 1 (75% - 25%), ce qui fait que le réseau a de bonnes performances artificiellement.
+
