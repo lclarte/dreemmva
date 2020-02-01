@@ -12,7 +12,3 @@ Les donnees sont enregistrees a une frequence de 250 hZ (500 samples a 2 seconde
 Liens pertinents : 
 - https://www.nature.com/articles/s41598-018-21495-7.pdf
 
-### TODO
-
-1. Coder les fonctions pour la prediction
-2. Abstraction pour entrainer les reseaux de neurone de la meme maniere que les autres modeles

@@ -26,16 +26,17 @@ class NNModel(TrainableModel):
         self.init(config)
 
     def init(self, config):
-        factories = {'BaseNetworkFactory' : BaseNetworkFactory}
+        factories = {'SimpleNetworkFactory' : SimpleNetworkFactory, 'BaseNetworkFactory' : BaseNetworkFactory}
         # define useful constants
-        self.epoch            = config['epoch']
+        self.epoch            = config['epoch'] 
+        self.optimizer        = config['optimizer']
         self.batch_size       = 32
         self.validation_split = 0.25
 
         # initialize NN
-        factory = factories[config['nn']]()
+        factory = factories[config['nn_factory']]()
         self.network = factory.get_network()
-        self.network.compile(loss='binary_crossentropy', optimizer='SGD', metrics=['accuracy'])
+        self.network.compile(loss='binary_crossentropy', optimizer=self.optimizer, metrics=['accuracy'])
 
     def preprocessing(self, x_train, y_train):
         x_train, y_train = data.flatten_data(x_train, y_train)
