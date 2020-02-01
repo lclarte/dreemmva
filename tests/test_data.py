@@ -4,6 +4,7 @@ sys.path.append('../core')
 import data
 import numpy as np
 import unittest
+import matplotlib.pyplot as plt
 
 class DataTest(unittest.TestCase):
     def test_flatten_data(self):
@@ -29,6 +30,26 @@ class DataTest(unittest.TestCase):
         y = np.array([[0., 1.], [1., 0.], [0., 1.]])
         y2 = data.categorize_y(y)
         self.assertTrue(np.all(np.equal(y2, [1., 0., 1.])))
+
+    def test_subsample(self):
+        x = np.array(list(range(10))).reshape((1, 10))
+        y = data.subsample(x, base_freq=2., target_freq=1.)
+        self.assertTrue(np.array_equal(y[0], list(range(0, 10, 2))))
+    
+    def test_butter(self):
+        # Test on synthetic data : sdeux secondes, 100 Hz
+        abscisse = np.linspace(-1, 1, 200)
+        x = np.cos(np.pi*abscisse)
+
+        epsilon = 0.1
+        x_noise = x + epsilon*np.cos(10*np.pi*abscisse)
+
+        y = data.bandpass_filter([x_noise], low=0.1, high=1.0, freq=100)
+
+        plt.plot(abscisse, x_noise)
+        plt.plot(abscisse, x)
+        plt.plot(abscisse, y[0])
+        plt.show()
 
 if __name__ == '__main__':
     unittest.main()

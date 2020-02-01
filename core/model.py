@@ -26,23 +26,33 @@ class NNModel(TrainableModel):
         self.init(config)
 
     def init(self, config):
+        factories = {'BaseNetworkFactory' : BaseNetworkFactory}
         # define useful constants
-        self.epoch            = 3
+        self.epoch            = config['epoch']
         self.batch_size       = 32
         self.validation_split = 0.25
 
         # initialize NN
-        factory = BaseNetworkFactory()
+        factory = factories[config['nn']]()
         self.network = factory.get_network()
-        self.network.compile(loss='binary_crossentropy', optimizer='adamax', metrics=['accuracy'])
+        self.network.compile(loss='binary_crossentropy', optimizer='SGD', metrics=['accuracy'])
+
+    def preprocessing(self, x_train, y_train):
+        x_train, y_train = data.flatten_data(x_train, y_train)
+        x_train = data.reorder_nhwc(x_train)
+
+        # subsampling and bandpass filtering
+        for i in range(len(x_train)):
+            x_train[i, :, :250, 0] = data.bandpass_filter(data.subsample(x_train[i, :, :, 0]))
+
+        return x_train, y_train
 
     def train(self, x_train, y_train):
         """
         x_train.shape = (N, 40, 7, 500)
         y_train.shape = (N, 2)
         """
-        x_train, y_train = data.flatten_data(x_train, y_train)
-        x_train = data.reorder_nhwc(x_train)
+        x_train, y_train = self.preprocessing(x_train, y_train)
 
         self.network.fit(x_train, y_train, epochs=self.epoch, batch_size=self.batch_size, validation_split=self.validation_split)
         return True

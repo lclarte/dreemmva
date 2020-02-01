@@ -11,6 +11,9 @@ def plot_eeg_sample(x):
     plot_eeg_samples([x])
 
 def plot_eeg_samples(xs):
+    """
+    Format d'entree : [N, 7] car 7 channels
+    """
     fig, axs = plt.subplots(nrows=2, ncols=4)
     for i in range(7):
         ax = axs[i // 4, i % 4]

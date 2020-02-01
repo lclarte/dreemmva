@@ -7,6 +7,7 @@ import itertools
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import scipy.signal as signal
 import seaborn as sns
 from sklearn.metrics import accuracy_score
 
@@ -113,3 +114,24 @@ def fft_eeg(xs):
         raise ValueError()
     # fourier transform sur l'avant derniere coordonnees
     return np.fft.fft(xs, axis=2)
+
+def subsample(x, base_freq=250, target_freq=125): 
+    """
+    x.shape = (channels, steps = time * base_freq) par exemple (7, 500)
+    Idealement, le ratio de frequences base_freq / target_freq doit etre entier
+    Arguments par defauts : cf. donnees de Dreem
+    returns : 
+        - array de shape (channels, time * target_freq)
+    """
+    ratio = int(base_freq / target_freq)
+    return x[:, 0:-1:ratio]
+
+def bandpass_filter(x, low=0.5, high=25, freq=125):
+    """
+    Filtre de butterworth du premier ordre entre les deux frequences donees en entree 
+    Arguments par defaut : on fait un passe bande entre 0.5 et 25 Hz
+    Shape de x : (channels, steps)
+    """
+    b, a = signal.butter(1, [low, high], btype='bandpass', fs=freq)
+    y = np.array([signal.lfilter(b, a, x[i]) for i in range(len(x))])
+    return y
