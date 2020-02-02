@@ -1,8 +1,9 @@
 # model.py
 # classe abstraite qui inclut les NN et autres modeles (modeles lineaires)
 
-from core.network import BaseNetworkFactory
+from core.network import BaseNetworkFactory, SimpleNetworkFactory
 import core.data as data
+from keras import optimizers
 import numpy as np
 
 import os
@@ -39,14 +40,23 @@ class NNModel(TrainableModel):
         self.network.compile(loss='binary_crossentropy', optimizer=self.optimizer, metrics=['accuracy'])
 
     def preprocessing(self, x_train, y_train):
+        """
+        Retourne x de shape (_, 7, 250, 1)
+        """
+        # on "aplatit" les 40 samples independants
         x_train, y_train = data.flatten_data(x_train, y_train)
+        
+        # si on veut avoir un seul neurone en sortie
+        y_train2 = np.argmax(y_train, axis=1)
+        
         x_train = data.reorder_nhwc(x_train)
+        n, h, w, c = x_train.shape
+        x_train2 = np.zeros(shape=(n, h, int(w/2), c))
 
         # subsampling and bandpass filtering
         for i in range(len(x_train)):
-            x_train[i, :, :250, 0] = data.bandpass_filter(data.subsample(x_train[i, :, :, 0]))
-
-        return x_train, y_train
+            x_train2[i, :, :, 0] = data.bandpass_filter(data.subsample(x_train[i, :, :, 0]))
+        return x_train2, y_train2
 
     def train(self, x_train, y_train):
         """
@@ -54,8 +64,9 @@ class NNModel(TrainableModel):
         y_train.shape = (N, 2)
         """
         x_train, y_train = self.preprocessing(x_train, y_train)
+        weights = data.weight_data(y_train)
 
-        self.network.fit(x_train, y_train, epochs=self.epoch, batch_size=self.batch_size, validation_split=self.validation_split)
+        self.network.fit(x_train, y_train, epochs=self.epoch, batch_size=self.batch_size, validation_split=self.validation_split, sample_weight=weights)
         return True
 
     def set_network(self, network):

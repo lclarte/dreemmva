@@ -8,8 +8,8 @@ class NetworkFactory:
     """
     For all networks, the input shape is NHWC with C = 1 (one channel)
     """
-    def __init__(self):
-        self.h, self.w, self.c = 7, 500, 1
+    def __init__(self, *, h=7, w=500, c=1):
+        self.h, self.w, self.c = h, w, c
         self.input_shape = (self.h, self.w, self.c)
         self.activation = 'relu'
 
@@ -24,7 +24,7 @@ class SimpleNetworkFactory(NetworkFactory):
     Reseau tres simple pour tester que le code tourne
     """
     def __init__(self):
-        super().__init__()
+        super().__init__(h=7, w=250, c=1)
         self.dense_shape = self.h*self.w*self.c
         self.output_shape = 2
     
@@ -42,7 +42,7 @@ class BaseNetworkFactory(NetworkFactory):
     """
     def __init__(self):
         # need to put channel last otherwise there are bugs
-        super().__init__()
+        super().__init__(h=7, w=250, c=1)
         self.nfilters1  = 100
         self.nfilters2  = 300
         self.dense_shape = self.h*self.w*self.c
@@ -63,5 +63,5 @@ class BaseNetworkFactory(NetworkFactory):
         model.add(Flatten())
         model.add(Dense(self.dense_shape, activation=self.activation))
         # output = vecteur de probas pour chaque classe
-        model.add(Dense(2, activation='softmax'))
+        model.add(Dense(1, activation='softmax'))
         return model

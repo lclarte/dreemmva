@@ -10,5 +10,6 @@ Les donnees sont enregistrees a une frequence de 250 hZ (500 samples a 2 seconde
 
 
 Liens pertinents : 
-- https://www.nature.com/articles/s41598-018-21495-7.pdf
+- Article original : https://www.nature.com/articles/s41598-018-21495-7.pdf
+- Neural Networks for EEG : https://arxiv.org/abs/1703.05051 & https://github.com/TNTLFreiburg/braindecode
 

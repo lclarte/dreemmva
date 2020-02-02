@@ -12,7 +12,7 @@ def test_train():
 
 	config = {'nn_factory' : 'BaseNetworkFactory',
 			  'epoch' : 30,
-			  'optimizer' : 'SGD'}
+			  'optimizer' : 'Adamax'}
 	model = NNModel(config)
 	print(model.get_network().summary())
 
