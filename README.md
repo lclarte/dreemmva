@@ -12,4 +12,4 @@ Les donnees sont enregistrees a une frequence de 250 hZ (500 samples a 2 seconde
 Liens pertinents : 
 - Article original : https://www.nature.com/articles/s41598-018-21495-7.pdf
 - Neural Networks for EEG : https://arxiv.org/abs/1703.05051 & https://github.com/TNTLFreiburg/braindecode
-
+- Review of class. algorithms for EEG-based BCI : https://hal.inria.fr/inria-00134950/document
