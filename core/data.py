@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.signal as signal
-import seaborn as sns
 from sklearn.metrics import accuracy_score
 
 """
@@ -67,7 +66,7 @@ def flatten_y(y : np.ndarray, repeat : int):
     """
     Recopie chaque entree de y un nombre repeat de fois
     """
-    n, _ = y.shape
+    n = len(y)
     return np.tile(y, (1, repeat)).reshape((n*repeat, 2), order='C')
 
 def vectorize_y(Y):
