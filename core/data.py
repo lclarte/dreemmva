@@ -28,13 +28,16 @@ def load_x(file_name):
 
 def load_y(file_name):
     """
-    Load Y data from csv
+    Load Y data from csv. 
+    Returns ONLY the value w/o the index, in the one hot format
+    example : in the original file, [(0, 0), (1, 0), (2, 1)] becomes 
+    [[1.0, 0.0], [1.0, 0.0], [0.0, 1.0]]
     """
     print('Started loading file', file_name)
     data = pd.read_csv(file_name)
     print('Finished loading the file.')
     data = np.array(data)
-    return data
+    return np.eye(2)[data[:, 1]]
 
 def save_y(y, file_name):
     with open(file_name, 'w') as csvfile:
