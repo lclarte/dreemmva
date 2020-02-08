@@ -99,19 +99,17 @@ def flatten_data(x, y):
 def compare_predict(y_pred, y_true):
     return accuracy_score(y_true, y_pred)
 
-
 def weight_data(y):
     """
     Pondere les inputs selon la representation des différentes classes
-    Forme de y : 
+    Forme de y : 1D array
     """
     # compte le nombre d'element de y de chaque classe (0 et 1)
-    condition = lambda i : np.array_equal(y[i], [0., 1.])
-    n = len(y)
-    y_1 = np.sum([1. for i in range(n) if condition(i)])
-    y_0 = float(n) - y_1
-    return np.array([float(n) / y_1 if condition(i) else float(n) / y_0 for i in range(n)])
-
+    class_sample_count = np.array(\
+                [len(np.where(y == t)[0]) for t in range(2)])
+    weights = float(len(y)) / class_sample_count
+    samples_weight = np.array([weights[t] for t in y])
+    return samples_weight
 """
 data transformation functions
 """
