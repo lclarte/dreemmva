@@ -39,13 +39,12 @@ def load_y(file_name):
     data = np.array(data)
     return np.eye(2)[data[:, 1]]
 
-def save_y(y, file_name):
-    with open(file_name, 'w') as csvfile:
-        writer = csv.writer(csvfile, delimiter=',')
+def save_csv(y, file_name):
+    with open(file_name, 'w') as file:
+        writer = csv.writer(file, delimiter=',')
         writer.writerow(['id', 'label'])
         for i in range(len(y)):
-            writer.writerow([str(i), str(y[i])])
-
+            writer.writerow([str(i), str(int(y[i]))])
 
 """
 data formatting functions
@@ -72,20 +71,6 @@ def flatten_y(y : np.ndarray, repeat : int):
     n = len(y)
     return np.tile(y, (1, repeat)).reshape((n*repeat, 2), order='C')
 
-def vectorize_y(Y):
-    N, _ = Y.shape
-    vecY = np.zeros(shape=(N, 2))
-    for i in range(N):
-        vecY[i, Y[i][1]] = 1.
-    return vecY
-
-def categorize_y(y):
-    """
-    Prend en argument les predictions y sous forme vectorisee et les transforme en categoriel
-    {0, 1}
-    """
-    return np.argmax(y, axis=1)
-
 def flatten_data(x, y):
     """
     takes the 40 independent samples and puts them in 40 different data points
@@ -99,17 +84,37 @@ def flatten_data(x, y):
 def compare_predict(y_pred, y_true):
     return accuracy_score(y_true, y_pred)
 
+def class_weights(y):
+    """
+    Retourne un poids pour chaque classe
+    """
+    class_sample_count = np.array(\
+                [len(np.where(y == t)[0]) for t in range(2)])
+    return float(len(y)) / class_sample_count
+
 def weight_data(y):
     """
-    Pondere les inputs selon la representation des différentes classes
+    Retourne un poids pour chaque input selon la representation des différentes classes
     Forme de y : 1D array
     """
     # compte le nombre d'element de y de chaque classe (0 et 1)
-    class_sample_count = np.array(\
-                [len(np.where(y == t)[0]) for t in range(2)])
-    weights = float(len(y)) / class_sample_count
+    weights = class_weights(y)
     samples_weight = np.array([weights[t] for t in y])
     return samples_weight
+
+def average_predictions(predictions, nb_trials = 40):
+    """
+    average the predictions for the nb_trials independent samples to predict
+    the sex of each subject.
+    """
+    # number of samples
+    n = int(len(predictions) / nb_trials)
+    avg_preds = np.zeros(n)
+    for i in range(n):
+        sample_preds = predictions[i*nb_trials:(i+1)*nb_trials]
+        avg_preds[i] = int(np.mean(sample_preds) > 0.5)
+    return avg_preds
+
 """
 data transformation functions
 """
