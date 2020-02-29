@@ -21,3 +21,13 @@ def plot_eeg_samples(xs):
         for l in range(len(xs)):
             ax.plot(xs[l][i])
     plt.show()
+
+def save_eeg_sample(x, title, savefile):
+    fig ,axs = plt.subplots(nrows=2, ncols=4)
+    for i in range(7):
+        ax = axs[i // 4, i % 4]
+        ax.set_title(str(i+1))
+        ax.plot(x[i])
+    plt.suptitle(title)
+    plt.savefig(savefile)
+
