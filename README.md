@@ -14,3 +14,6 @@ Liens pertinents :
 - Review of class. algorithms for EEG-based BCI : https://hal.inria.fr/inria-00134950/document
 - Muller et al., ML techniques for BCI (2004) : http://doc.ml.tu-berlin.de/bbci/publications/MueKraDorCurBla04.pdf
 - Blankertz et al., Classifying single trial EEG (2002): https://papers.nips.cc/paper/2030-classifying-single-trial-eeg-towards-brain-computer-interfacing.pdf
+- Del Rio-Portilla et al., Sex differences in EEG in adult gonadectomized rats (...) (1997)
+- Latta et al., Sex differences in Delta and Alpha EEG activities in healthy older adults (2018)
+- Puranik et al., Elementary Time Frequency Analysis of EEG sig. proc. (2018) 
