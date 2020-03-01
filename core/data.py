@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import scipy.signal as signal
 from sklearn.metrics import accuracy_score
+from sklearn.utils.class_weight import compute_class_weight
 
 """
 Data loading and saving function functions
@@ -88,9 +89,7 @@ def class_weights(y):
     """
     Retourne un poids pour chaque classe
     """
-    class_sample_count = np.array(\
-                [len(np.where(y == t)[0]) for t in range(2)])
-    return float(len(y)) / class_sample_count
+    return compute_class_weight('balanced', np.unique(y), y)
 
 def weight_data(y):
     """

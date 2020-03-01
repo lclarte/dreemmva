@@ -17,3 +17,5 @@ Liens pertinents :
 - Del Rio-Portilla et al., Sex differences in EEG in adult gonadectomized rats (...) (1997)
 - Latta et al., Sex differences in Delta and Alpha EEG activities in healthy older adults (2018)
 - Puranik et al., Elementary Time Frequency Analysis of EEG sig. proc. (2018) 
+- Logistic Regression in Rare Events Data, King, Zen, 2001
+    * Justifies the class weights in the imbalanced dataset (sklearn function class_weight.compute_class_weight)

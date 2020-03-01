@@ -6,9 +6,11 @@ import visualization
 import numpy as np
 import unittest
 
+x_train_file = '../data/x_train.h5'
+
 class DisplayTest(unittest.TestCase):
     def test_display(self):
-        X = np.array(data.load_x('../data/X_train.h5'))
+        X = np.array(data.load_x(x_train_file))
         X2 = data.flatten_x(X)
  
         samples = [X[0, i] for i in range(10)]
@@ -17,7 +19,7 @@ class DisplayTest(unittest.TestCase):
             visualization.plot_eeg_sample(samples[i])
 
     def test_fft_display(self):
-        X = np.array(data.load_x('../data/X_train.h5'))
+        X = np.array(data.load_x(x_train_file))
         X = data.reorder_nhwc(data.flatten_x(X))
         X = data.fft_eeg(X)
 
@@ -27,7 +29,8 @@ class DisplayTest(unittest.TestCase):
             visualization.plot_eeg_sample(samples[i])
 
     def test_butter_display(self):
-        X = np.array(data.load_x('../data/X_train.h5'))
+        print('Test of bandpass filter ... ')
+        X = np.array(data.load_x(x_train_file))
         X = data.reorder_nhwc(data.flatten_x(X))
 
         samples = [X[i, :, :, 0] for i in range(10)]

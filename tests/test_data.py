@@ -6,6 +6,8 @@ import numpy as np
 import unittest
 import matplotlib.pyplot as plt
 
+y_train_file = '../data/y_train.csv'
+
 class DataTest(unittest.TestCase):
     def test_flatten_data(self):
         n, c, h, w = 6, 2, 2, 2
@@ -26,10 +28,15 @@ class DataTest(unittest.TestCase):
                             x_valid = False
         self.assertTrue(x_valid and y_valid)
 
-    def test_categorize_y(self):
-        y = np.array([[0., 1.], [1., 0.], [0., 1.]])
-        y2 = data.categorize_y(y)
-        self.assertTrue(np.all(np.equal(y2, [1., 0., 1.])))
+    def test_class_weight(self):
+        y = data.load_y(y_train_file)
+        y = np.argmax(y, axis=1)
+        nb_class_0, nb_class_1 = np.count_nonzero(y == 0), np.count_nonzero(y == 1)
+        print('Number of elements in each class : ', nb_class_0, ' & ', nb_class_1)
+        print('Ratio of class cardinals : ', nb_class_0 / float(len(y)), ' & ', nb_class_1 / float(len(y)))
+        weights = data.class_weights(y)
+        print('Class weights : ', weights[0], '&', weights[1])
+        
 
     def test_subsample(self):
         x = np.array(list(range(10))).reshape((1, 10))

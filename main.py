@@ -19,12 +19,13 @@ def visualize_all_data():
         # We have 946 subjects, 40 samples per subject and 7 channels per sample
         print(x_loaded.shape)
         S, N, h, w = x_loaded.shape
+        print('This function will save ALL the EEG recordings in the folder images. Sure ? ')
+        input()
         for i in range(S):
             for j in range(N):
                 title = 'EEG recordings for subject ' + str(i+1) + ', sample number ' + str(j + 1)
                 savefile = 'images/recording_' + str(i) + '_' + str(j) + '.png' 
                 visu.save_eeg_sample(x_loaded[i, j], title, savefile)
-                # TODO : commenter la ligne input
 
 def test_braindecode():
         # load data 
