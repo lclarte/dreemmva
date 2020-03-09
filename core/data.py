@@ -12,13 +12,14 @@ from sklearn.metrics import accuracy_score
 from sklearn.utils.class_weight import compute_class_weight
 
 """
-Data loading and saving function functions
+Data loading and saving function functions. 
 """
 
 def load_x(file_name):
     """
     Load X dataset from h5 file.
     Warning : returns the data in the format (N, C, H, W) = (_, 40, 7, 500)
+    => the data must be formatted before use 
     """
     with h5py.File(file_name, 'r') as file:
         print('Started loading file', file_name)
@@ -48,7 +49,24 @@ def save_csv(y, file_name):
             writer.writerow([str(i), str(int(y[i]))])
 
 """
-data formatting functions
+Data formatting functions
+
+Utilisation : le format qu'on utilise par defaut est N, H, W, C
+Par exemple, (946, 7, 500, 40) channels = nb d'echantillons ici 
+ou encore (646 * 40, 7, 500, 1) quand on a "flatten" les echantillons
+
+code : 
+x = load_x(file_name)
+y = load_y(file_name)
+
+# pour garder C = 40
+x = reorder_nhwc(x)
+
+# pour avoir C = 1 et N <- N * 40
+x, y = flatten_data(x, y)
+OU 
+x, y = flatten_x(x), flatten_y(y, 40)
+x = reorder_nhwc(x)
 """
 
 def reorder_nhwc(x):
@@ -64,7 +82,14 @@ def flatten_x(x):
     """
     n, c, h, w = x.shape
     return x.reshape((n*c, 1, h, w), order='C')
-    
+
+def categorize_y(y):
+    """
+    Takes as input y in the one-hot vectors format and returns y in the format 
+    0 for men, 1 for women
+    """
+    return np.argmax(y, axis=1)
+
 def flatten_y(y : np.ndarray, repeat : int):
     """
     Recopie chaque entree de y un nombre repeat de fois
@@ -91,19 +116,19 @@ def class_weights(y):
     """
     return compute_class_weight('balanced', np.unique(y), y)
 
-def weight_data(y):
+def samples_weights(y):
     """
     Retourne un poids pour chaque input selon la representation des différentes classes
     Forme de y : 1D array
     """
     # compte le nombre d'element de y de chaque classe (0 et 1)
     weights = class_weights(y)
-    samples_weight = np.array([weights[t] for t in y])
-    return samples_weight
+    sweights = np.array([weights[t] for t in y])
+    return sweights
 
 def average_predictions(predictions, nb_trials = 40):
     """
-    average the predictions for the nb_trials independent samples to predict
+    Average the predictions for the nb_trials independent samples to predict
     the sex of each subject.
     """
     # number of samples
@@ -113,42 +138,3 @@ def average_predictions(predictions, nb_trials = 40):
         sample_preds = predictions[i*nb_trials:(i+1)*nb_trials]
         avg_preds[i] = int(np.mean(sample_preds) > 0.5)
     return avg_preds
-
-"""
-data transformation functions
-"""
-
-def fft_eeg(xs):
-    """
-    Fait une transformee de Fourier sur les 7 channels des donnees en entree
-    Taille : (_, 7, 500, 1) car le format d'entree est NHWC
-    """
-    shape = xs.shape
-    # xs must be an
-    if len(shape) == 3:
-        xs.shape = (1,) + shape
-    elif len(shape) < 3:
-        raise ValueError()
-    # fourier transform sur l'avant derniere coordonnees
-    return np.fft.fft(xs, axis=2)
-
-def subsample(x, base_freq=250, target_freq=125): 
-    """
-    x.shape = (channels, steps = time * base_freq) par exemple (7, 500)
-    Idealement, le ratio de frequences base_freq / target_freq doit etre entier
-    Arguments par defauts : cf. donnees de Dreem
-    returns : 
-        - array de shape (channels, time * target_freq)
-    """
-    ratio = int(base_freq / target_freq)
-    return x[:, 0:-1:ratio]
-
-def bandpass_filter(x, low=0.5, high=25, freq=125):
-    """
-    Filtre de butterworth du premier ordre entre les deux frequences donees en entree 
-    Arguments par defaut : on fait un passe bande entre 0.5 et 25 Hz
-    Shape de x : (channels, steps)
-    """
-    b, a = signal.butter(1, [low, high], btype='bandpass', fs=freq)
-    y = np.array([signal.lfilter(b, a, x[i]) for i in range(len(x))])
-    return y
