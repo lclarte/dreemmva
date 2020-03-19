@@ -3,3 +3,10 @@ data/y_lol.csv
 data/X_train.h5
 data/X_test.h5
 __pycache__/
+*.swp
+*.aux
+*.log
+*.gz
+*.bbl
+*.blg
+
