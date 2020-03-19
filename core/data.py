@@ -34,7 +34,7 @@ def load_y(file_name):
     print('Started loading file', file_name)
     data = pd.read_csv(file_name)
     print('Finished loading the file.')
-    data = np.array(data)
+    data = np.array(data)[:, 1]
     return data
 
 def save_y(y, file_name):
@@ -67,8 +67,8 @@ def flatten_y(y : np.ndarray, repeat : int):
     """
     Recopie chaque entree de y un nombre repeat de fois
     """
-    n, _ = y.shape
-    return np.tile(y, (1, repeat)).reshape((n*repeat, 2), order='C')
+    n = y.shape[0]
+    return np.tile(y, (1, repeat)).reshape((n*repeat, 1), order='C')
 
 def vectorize_y(Y):
     N, _ = Y.shape
