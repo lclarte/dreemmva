@@ -11,7 +11,7 @@ première idée à la volée : on slip chaque sample de 2 sec, on fait un transf
 
 ### INSTRUCTIONS
 
-Pour faire fonctionner le code, creer le dossier **data** et telecharger les fichiers à l'adresse suivante  : 
+Pour faire fonctionner le code, creer le dossier **data** et telecharger les fichiers à l'adresse suivante: 
 https://challengedata.ens.fr/participants/challenges/27/
 Ensuite, renommer les fichiers X_train, X_test, y_train
 
@@ -33,5 +33,10 @@ Liens pertinents :
 - Puranik et al., Elementary Time Frequency Analysis of EEG sig. proc. (2018) 
 - Logistic Regression in Rare Events Data, King, Zen, 2001
     * Justifies the class weights in the imbalanced dataset (sklearn function class_weight.compute_class_weight)
+- DOSED : A deep learning approach to detect multiple sleep micro-events : https://scihub.bban.top/https://doi.org/10.1016/j.jneumeth.2019.03.017
 - https://github.com/tevisgehr/EEG-Classification
     * Preprocessing des EEG en faisant des FFT sur des fenetres glissantes de 1 secondes puis frequency binning
+- https://github.com/keras-team/keras-tuner
+    * Libraire pour tuner les hyperparametres dans un modele sur Keras
+- https://github.com/Dreem-Organization/dosed
+    * DOSED : Detection of spindles and K-complexes
