@@ -11,15 +11,17 @@ The original article on which the challenge is based proposed \cite{vanPutten201
 
 The first of this project was to reproduce the results presented in\cite{vanPutten2018}. 
 
-\paragraph{Data formating} The authors of\cite{vanPutten2018} studied EEG recordings of 2 seconds with a sampling frequency of 128 Hz and 24 channels, thus having data formatted as 24 x 256 matrices. Since our input data has the shape of 7 x 500 matrices, we decided to resize them to the network's input shape.
-% TODO : Dire que ça n'a pas de signification physique mais que c'est motivé ar le fait que l'architecture est inspirée d'ImageNet (donc on fait comme avec le traitement d'image).
+\paragraph{Data formating} The authors of\cite{vanPutten2018} studied EEG recordings of 2 seconds with a sampling frequency of 128 Hz and 24 channels, thus having data formatted as 24 x 256 matrices. Since our input data has the shape of 7 x 500 matrices, we decided to resize them to match the the network's input shape. 
 
-For hyperparameter tuning, we used the python library \texttt{keras-tuner}
+\paragraph{Reordering channels} We saw in section \ref{sensor_correlations} that some sensors were sontrgly correlated with one another. To take into account these correlations, we swapped rows of our dataset so that these strongly correlated channels are consecutive in the dataset : namely, we swap the channels 2 and 5. While we have no rigorous mathematical justification for this reordering, we have an intuitive justification : indeed, as explained in the article \cite{vanPutten2018}, the neural network architecture used is inspired by previous work on image datasets such as ImageNet. However, in images, nearby pixels are strongly correlated for the sole reason that two pixels belonging to the same object will have very similar color. If the EEG recordings are treated the same way as images, we want nearby pixels to be as correlated as possible. 
+
+% TODO : figure avant apres 
+
+
+For hyperparameter tuning, the python library \texttt{keras-tuner} was used. 
 
 \subsection{Braindecode library}
 
 In addition, we used the Python library \cite{braindecode}, which is specialized in classification of EEG recordings using deep-learning and built on top of the Pytorch library.
 
-\paragraph{Deep neural network}
 
-\paragraph{Visualizing the network parameters}

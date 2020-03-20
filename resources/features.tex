@@ -33,7 +33,10 @@ Applying this algorithm on the 264880 2-seconds recordings of our training set, 
 \paragraph{Dosed} Contrary to YASA, this Python library trains a deep learning model to identify sleep spindles. It thus requires training using annoted recordings where sleep spindles are already identified.
 Because of our lack of time, we limiteed ourselves to YASA for our experiments, as it does not require supplementary data for training and was overall easier to use in our own codebase. 
 
-
-% Deep learning based
-
 \subsection{K-complexes}
+
+\subsection{Correlation between sensors}
+\label{sensor_correlations}
+
+Observing the data leads us to observe a strong correlation between some channels : indeed, the pairs of channels (1, 5), (2, 6) and (3, 4) seem to show strongly correlated signals. To verify this fact, we computed a correlation matrix $M$ for each of the 946 $\times$ 40 recordings : the 7 $\times$ 7 matrix $M$ stores the value returned by the \texttt{numpy} function \texttt{np.correlate}($s_i$, $s_j$) for the signals of two sensors $s_i$, $s_j$. In our case, this function simply returns the cross product of the 500 dimensional vectors corresponding to each sensor. Then, for each row $i$ of M, we simply compute the sensor $j$ that maximizes the cross product with $i$ (other than $i$ itself). Doing this for all the recordings, we confirm the observation stated above. 
+
