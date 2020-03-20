@@ -1,3 +1,18 @@
 \section{Classification with linear models}
 
-% TODO : Le faire !
+\paragraph{Linear classifier using DFT. } Recall that a signal $x(t) \in L^2(\mathbb{R})$ is entirely characterized by its Fourier transform $\widehat{x}(\omega) \in L^2(\mathbb{R})$ and vice-versa (\emph{i.e.} $x(t) \mapsto \widehat{x}(\omega)$ is a bijective isometry of $L^2(\mathbb{R})$). Therefore, by working on the frequency-signal $\widehat{x}(\omega)$ rather that on the time-signal $x(t)$, we do not lose (\emph{a priori}) any relevant information concerning the recorded time-signal. Because the EEG data at our disposition is not time-stamped, the temporal structure is so to say inexistant, which advocates for carrying the computations into the frequency-domain. Given a discrete time-signal $\{x_0, \dots, x_{N-1} \}$, the \emph{Discrete Fourier Transform} (DFT) is defined as the frequency-signal $\{\omega_0, \dots, \omega_{N-1}\}$, where
+$$
+\omega_k := \sum_{j = 0}^{N-1} x_j \exp( - i 2 \pi kj/N), \quad k = 0, \dots, N-1. 
+$$
+
+
+Because the recordings are our disposal each only spans for a short duration $T$ across time (\emph{i.e.} $T = 2$ sec), there exists a lower-bound $\omega_{low}$ in the frequency-domain below which the Fourier transform is simply unable to perform anymore, that is $\omega_{low} = 1/T$ (\emph{i.e.} $0.5$ Hz in our context). This is a well-known drawback to the short-time Fourier transform. Nevertheless, because of the nature of our data as presented above, we shall not be expecting such low-frequency features in the EEG signal.
+
+Inherent to any dataset obtained through physical-acquisition is the presence of measurement noise. For each EEG channel, we want to estimate the \emph{power spectral density} (PSD) (\emph{i.e.} the quantity $| \widehat{x}(\omega)|^2$) as accurately as possible. One way to proceed is the \emph{Bartlett's method}, which consists in splitting the recorded signal $\{x_0, \dots, x_{KQ - 1}$ of size $KQ$ into $K$ segments disjoint of size $Q$, \emph{i.e.} $(\{x_{k(Q - 1)}, \dots, x_{(k+1)Q - 1}\})_{k=1}^K$, to compute the spectral density for each segment through a certain weight function (\emph{i.e.} the window) and to average over the segments. This allows for a smaller variance in the measurement (\emph{i.e.} less measurement noise). An improvement of the Bartlett's method is the so-called \emph{Welch's method} which introduces a overlap of user-defined size $D$ between the different segments $s_k$'s (\emph{i.e.} $|s_k \cap s_{k+1}| = D$). Since the windows are generically more sensitive to the data at the centers of the segments, the Bartlett's method results in a loss of information, which here is alleviated by the overlapping. 
+
+
+Using Welch's method, we compute the PSD of men and women over different splits of the training set (we average over the $40$ samples for each subject). First, \emph{(i)} we observe trends for each channel that are quite similar from split to split, which indicates a common underlying geometry to the data (\emph{i.e.} the data is consistent across all subjects). Over some splits, \emph{(ii)} we observe a mild but nevertheless significant difference between genders. Nevertheless, \emph{(iii)} some splits yield very similar results for both male and female, which therefore tends to indicate that the variance of the Welch estimator is rather to be sought in inter-subject variability than in inter-sex variability.
+
+
+Nevertheless, we perform a simple classification 
+\paragraph{Linear classifier using DWT}
