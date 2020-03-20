@@ -30,4 +30,5 @@ def save_eeg_sample(x, title, savefile):
         ax.plot(x[i])
     plt.suptitle(title)
     plt.savefig(savefile)
+    plt.close()
 

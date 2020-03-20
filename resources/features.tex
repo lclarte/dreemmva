@@ -7,23 +7,32 @@ Note that the short duration of our EEG recordings makes it harder to efficientl
 
 \subsection{Brain rhythms}
 
+The work studied in this challenge claimed Previous work such as \cite{Latta2005} showed evidence of a higher neural activity in the alpha and delta frequency range.
+
 \subsection{Sleep spindles}
 
 % TODO : parler des ondelettes https://raphaelvallat.com/spindles.html
 % TODO : Presenter les sleep spindles. Parler de YASA et de la librairie de Dreem
 % TODO : dire que les sleep spindles durent 0.5 - 1.5 seconde et que les echantillons durent 2 secondes, donc trop peu pour classifier efficacement les spindles
 
-Several Python libraries are able to compute sleep spindles. In our work, we studied two of them : YASA()\cite{Vallat2020} and Dosed\cite{Chambon2018}. These two libraries follow different approaches and are detailed below. 
+Several Python libraries are able to compute sleep spindles. In our work, we studied two of them : YASA\cite{Vallat2020} and Dosed\cite{Chambon2018}. These two libraries follow different approaches and are detailed below. 
 
 \paragraph{YASA} This library is based on the work done in \cite{Lacourse2019} and detects sleep spindles using four well-chosen features : 
 the absolute sigma power, the relative sigma power, the sigma covariance and the sigma correlation.
-Applying this algorithm on the 264880 2-seconds recordings of our training set, ... sleep spindles were detected.
+Applying this algorithm on the 264880 2-seconds recordings of our training set, 441 sleep spindles were detected. Figure (\ref{fig:spindles}) shows two examples of sleep spindles present in the training dataset. 
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{images/spindles_example.png}
+	\caption{Example of two recordings showing sleep spindles, from revised x\_train.h5 file. Left : subject 1, sample 12, channel 4. Right : subject 3, sample 16, channel 5. We can clearly observe the oscillatory behavior lasting for about half a second.}
+	\label{fig:spindles}
+\end{figure}
 
 % TODO :  echantillons, ou des parametres a tuner. 
 % TODO : bla bla bla 
 
-\paragraph{Dosed} Contrary to YASA, this Python library trains a deep learning model to identify sleep spindles.
-% TODO : Dire qu'on l'a pas utilisé par manque de temps 
+\paragraph{Dosed} Contrary to YASA, this Python library trains a deep learning model to identify sleep spindles. It thus requires training using annoted recordings where sleep spindles are already identified.
+Because of our lack of time, we limiteed ourselves to YASA for our experiments, as it does not require supplementary data for training and was overall easier to use in our own codebase. 
+
 
 % Deep learning based
 

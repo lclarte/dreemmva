@@ -30,10 +30,11 @@ Liens pertinents :
 - Blankertz et al., Classifying single trial EEG (2002): https://papers.nips.cc/paper/2030-classifying-single-trial-eeg-towards-brain-computer-interfacing.pdf
 - Del Rio-Portilla et al., Sex differences in EEG in adult gonadectomized rats (...) (1997)
 - Latta et al., Sex differences in Delta and Alpha EEG activities in healthy older adults (2018)
-- Puranik et al., Elementary Time Frequency Analysis of EEG sig. proc. (2018) 
+- Puranik et al., Elementary Time Frequency Analysis of EEG sig. proc. (2018)
 - Logistic Regression in Rare Events Data, King, Zen, 2001
     * Justifies the class weights in the imbalanced dataset (sklearn function class_weight.compute_class_weight)
 - DOSED : A deep learning approach to detect multiple sleep micro-events : https://scihub.bban.top/https://doi.org/10.1016/j.jneumeth.2019.03.017
+- A deep learning architecture for temporal sleep 
 - https://github.com/tevisgehr/EEG-Classification
     * Preprocessing des EEG en faisant des FFT sur des fenetres glissantes de 1 secondes puis frequency binning
 - https://github.com/keras-team/keras-tuner
