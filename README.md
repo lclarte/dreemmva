@@ -41,3 +41,7 @@ Liens pertinents :
     * Libraire pour tuner les hyperparametres dans un modele sur Keras
 - https://github.com/Dreem-Organization/dosed
     * DOSED : Detection of spindles and K-complexes
+
+- Automatic tagging using deep convolutional neural networks https://archives.ismir.net/ismir2016/paper/000009.pdf
+- Very deep convolutional neural networks for large scale image recognition 
+    * Deux articles utilisés pour justifier les convolutions sur le spectre en fréquence 

@@ -4,6 +4,8 @@
 import csv
 import h5py
 import itertools
+
+from imblearn.under_sampling import RandomUnderSampler
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -94,9 +96,29 @@ def flatten_y(y : np.ndarray, repeat : int):
     """
     Recopie chaque entree de y un nombre repeat de fois
     """
-    n = len(y)
-    return np.tile(y, (1, repeat)).reshape((n*repeat, 2), order='C')
+    if len(y.shape) == 1:
+        y0 = np.eye(2)[y]
+    n = len(y0)
+    retour =  np.tile(y0, (1, repeat)).reshape((n*repeat, 2), order='C')
+    if len(y.shape) == 1:
+        return np.argmax(retour, axis=1)
+    return retour
 
+def undersampling(X, y):
+    """
+    Retourne le plus grande nombre de sample tels qu'il y a autant d'hommes que de femmes
+    """
+    # Y doit etre categorise
+    assert (len(y.shape) == 1 or (len(y.shape == 2) and y.shape[1] == 1))
+
+    # indices where 
+    men, women = np.argwhere(y == 0).squeeze(), np.argwhere(y == 1).squeeze()
+    nb = min(len(men), len(women))
+    men_sub_indices = np.random.choice(men, size=nb, replace=False)
+    women_sub_indices = np.random.choice(women, size=nb, replace=False)
+    sub_indices = np.concatenate((men_sub_indices, women_sub_indices))
+    return X[sub_indices], y[sub_indices]
+    
 def flatten_data(x, y):
     """
     takes the 40 independent samples and puts them in 40 different data points

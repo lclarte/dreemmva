@@ -44,7 +44,13 @@ def batch_welch_method(x, sf):
 # swap sensors because it seems that some are more correlated w/ each other than the others
 # the channels to swap are hardcoded
 
-def swap_correlated_channels(x_train):
+def swap_correlated_channels(x_train, nhwc_format=True):
+    """
+    If nhwc_format = False, it is in format nchw = (946, 40, 7, 500)
+    """
     x_copy = np.copy(x_train)
-    x_copy[:, :, [1, 4], :] = x_copy[:, :, [4, 1], :]
+    if nhwc_format == False:
+        x_copy[:, :, [1, 4], :] = x_copy[:, :, [4, 1], :]
+    else:
+        x_copy[:,, [1, 4] :, :] = x_copy[:, [4, 1], :, :]
     return x_copy
